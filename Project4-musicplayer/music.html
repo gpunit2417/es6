@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main_div">
+        <div class="music_container">
+            <h2 id="title">2 Cheene</h2>
+            <h3 id="artist">Khan Bhaini</h3>
+            <div class="img_container">
+                <img src="images/2-Cheene-Khan-Bhaini.jpeg" alt=""/>
+            </div>
+            <audio src="music/2-Cheene-Khan-Bhaini.mp3"></audio>
+
+            <!-- progress bar -->
+            <div class="progressbar_container" id="progress_container">
+                <div class="progress_duration_meter">
+                    <div id="current_time">0:00</div>
+                    <div id="duration">3:20</div>
+                </div>
+                <div class="progress_div" id="progress_div">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+
+            <!-- music controls -->
+            <div class="music_controls">
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-play main_button" id="play" title="Play"></i>
+                <i class="fas fa-forward" id="next" title="Next"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        const music = document.querySelector('audio');
+        const img = document.querySelector("img");
+        const play = document.getElementById('play');
+        const title = document.getElementById('title');
+        const artist = document.getElementById('artist');
+        const prev = document.getElementById('prev');
+        const next = document.getElementById('next');
+        const current_time = document.getElementById('current_time');
+        let total_duration = document.getElementById('duration');
+        let progress = document.getElementById('progress');
+        const progress_div = document.getElementById('progress_div');
+
+        const songs = [
+            {
+                name: "2-Cheene-Khan-Bhaini",
+                title: "2-Cheene",
+                artist: "Khan Bhaini",
+            },
+            {
+                name: "Approach",
+                title: "Approach",
+                artist: "Jovan Dhillon Karan Aujla",
+            },
+            {
+                name: "Bazaar Band",
+                title: "Bazaar Band",
+                artist: "Dilpreet Dhillon DJ Flow",
+            },
+            {
+                name: "Black Night",
+                title: "Black Night",
+                artist: "Nawab",
+            },
+            {
+                name: "Chithiyaan",
+                title: "Chithiyaan",
+                artist: "Karan Aujla",
+            },
+            {
+                name: "Daang",
+                title: "Daang",
+                artist: "Mankirt Aulakh",
+            },
+            {
+                name: "Dhokha-Ninja",
+                title: "Dhokha",
+                artist: "Ninja",
+            },
+            {
+                name: "Dont-Care-Jovan-Johal-Khan-Bhaini",
+                title: "Don't Care",
+                artist: "Jovan Johal",
+            },
+            {
+                name: "Dream Girl - Gagan Babbar 128 Kbps",
+                title: "Dream Girl",
+                artist: "Gagan Babbar",
+            },
+            {
+                name: "Fark",
+                title: "Fark",
+                artist: "Gippy Grewal",
+            },
+            {
+                name: "Filmy Scene",
+                title: "Filmy Scene",
+                artist: "Korala Maan  Gurlez Akhtar",
+            },
+            {
+                name: "Flying",
+                title: "Flying",
+                artist: "Sucha Yaar",
+            },
+            {
+                name: "Levels",
+                title: "Levels",
+                artist: "Moose Wala", 
+            },
+            {
+                name: "Majak Thodi Ae Full Song",
+                title: "Majak Thodi Ae",
+                artist: "R Nait Gurlez Akhtar",
+            },
+            {
+                name: "Nazaare",
+                title: "Nazaare",
+                artist: "Tysin Sidhu",
+            },
+            {
+                name: "Paapi",
+                title: "Paapi",
+                artist: "Rangrez Sidhu Sidhu Moose Wala"
+            },
+            {
+                name: "Ranihaar",
+                title: "Ranihaar",
+                artist: "Nimrat Khaira",
+            },
+            {
+                name: "Yaara Rocky Mental",
+                title: "Yaara",
+                artist: "Parmish Verma",
+            }
+        ]
+        // for play the music
+        let isPlaying = false;
+        const playMusic = () => {
+            isPlaying = true;
+            music.play();
+            play.classList.replace('fa-play', 'fa-pause');
+            img.classList.add("anime");
+        }
+        
+        // for pause the music
+        const pauseMusic = () => {
+            isPlaying = false;
+            music.pause();
+            play.classList.replace('fa-pause', 'fa-play');
+            img.classList.remove("anime");
+        }
+        play.addEventListener('click', () => {
+            if(isPlaying){
+                pauseMusic();
+            }
+            else{
+                playMusic();
+            }
+        })
+
+        //changing the music
+        const loadSongs = (songs) => {
+            title.textContent = songs.title;
+            artist.textContent = songs.artist;
+            music.src = "music/" + songs.name + ".mp3";
+            img.src = "images/" + songs.name + ".jpeg";
+        }
+        songIndex = 0;
+        const nextSong = () => {
+            songIndex = (songIndex + 1) % songs.length;
+            loadSongs(songs[songIndex]);
+            playMusic();
+        }
+
+        const prevSong = () => {
+            songIndex = (songIndex - 1 + songs.length) % songs.length;
+            loadSongs(songs[songIndex]);
+            playMusic();
+        }
+
+        // progress bar js work
+        music.addEventListener('timeupdate', (event) => {
+            // console.log(event);
+            const {currentTime, duration} = event.srcElement;
+            let progress_time = (currentTime / duration) * 100;
+            progress.style.width = `${progress_time}%`;
+
+            // music duration update
+            let min_duration = Math.floor(duration/60);
+            let sec_duration = Math.floor(duration%60);
+            let tot_duration = `${min_duration}:${sec_duration}`;
+            if(duration){
+                total_duration.textContent = `${tot_duration}`;
+            }
+
+            // current duration time
+            let min_currentTime = Math.floor(currentTime/60);
+            let sec_currentTime = Math.floor(currentTime%60);
+
+            if(sec_currentTime < 10){
+                sec_currentTime = `0${sec_currentTime}`;
+            }
+            let tot_currentTime = `${min_currentTime}:${sec_currentTime}`;
+            current_time.textContent = `${tot_currentTime}`;
+
+        })
+
+        // progress bar onclick functionality
+        progress_div.addEventListener('click', (event) => {
+            const {duration} = music;
+
+            let move_progress = (event.offsetX/event.srcElement.clientWidth) * duration;
+            music.currentTime = move_progress;
+
+        })
+
+        // if music end next song to play
+        music.addEventListener('ended', nextSong);
+        next.addEventListener('click', nextSong);
+        prev.addEventListener('click', prevSong);
+    </script>
+</body>
+</html>
